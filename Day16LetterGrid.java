@@ -6,8 +6,13 @@ import java.util.*;
 
 public class Day16LetterGrid {
 
+	private String filePath;
 	private int width, height;
 	private char[][] grid;
+
+	public String getFilePath() {
+		return this.filePath;
+	}
 
 	public int getWidth() {
 		return this.width;
@@ -29,10 +34,17 @@ public class Day16LetterGrid {
 		this.grid[X][Y] = c;
 	}
 
-	public Day16LetterGrid(String path) throws IOException {
+	public Day16LetterGrid duplicate() {
+		// presumably there was no exception if this got set up
+		try {
+			return new Day16LetterGrid(this.getFilePath());
+		} catch (Exception e) {return null;}
+	} // clone
 
+	public Day16LetterGrid(String filePath) throws IOException {
+		this.filePath = filePath;
 		ArrayList<char[]> inputLines = new ArrayList<char[]>();
-		Scanner diskScanner = new Scanner(new File(path));
+		Scanner diskScanner = new Scanner(new File(this.filePath));
 
 		int width = 0;
 		int height = 0;
@@ -117,7 +129,7 @@ public class Day16LetterGrid {
 
 */
 
-	public void displayArray() {
+	public void display() {
 
 		for(int i = this.height - 1; i >= 0; i--) {
 			for(int j = 0; j < this.width; j++)

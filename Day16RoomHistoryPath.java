@@ -108,4 +108,15 @@ public class Day16RoomHistoryPath {
 		return output;
 	} // extend
 
+	public void show() {
+		Day16LetterGrid newGrid = this.getHead().getParentGrid().duplicate();
+
+		for(Day16RoomState roomState : this.history) {
+			newGrid.setCell(roomState.getXCoord(), roomState.getYCoord(),'█');
+
+		} // room loop
+
+
+		newGrid.display();
+	} // show
 } // class

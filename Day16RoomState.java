@@ -93,4 +93,67 @@ public class Day16RoomState {
 		return (newRS.getXCoord() == this.getXCoord() && newRS.getYCoord() == this.getYCoord());
 	} // matches
 
+
+	// LDFIXME why can't this handle an input of 3, but 2 is fine?
+	public void showPathsOfLength(int length) {
+		if(length < 1) {
+			System.out.println("Path length to show must be at least 1.");
+			return;
+		}
+
+		ArrayList<Day16RoomHistoryPath> oldPaths = new ArrayList<Day16RoomHistoryPath>();
+		ArrayList<Day16RoomHistoryPath> newPaths = new ArrayList<Day16RoomHistoryPath>();
+
+		oldPaths.add(new Day16RoomHistoryPath(this));
+		int lengthFullyCaptured = 1;
+
+		while (lengthFullyCaptured < length) {
+
+			for(Day16RoomHistoryPath path : oldPaths) {
+				path.show();
+			} // path for-each
+
+			newPaths.clear();
+
+			for(Day16RoomHistoryPath oldPath : oldPaths) {
+				ArrayList<Day16RoomHistoryPath> childPaths = oldPath.extend(true); // LDFIXME HARD VALUED BOOLEAN DEBUG
+				oldPath.display();
+				System.out.print(" has ");
+				System.out.print(childPaths.size());
+				System.out.println(" child paths.");
+				for(Day16RoomHistoryPath childPath : childPaths) {
+					newPaths.add(childPath);
+
+				} // child path loop
+			} // old path loop
+			System.out.print(lengthFullyCaptured);
+			System.out.print(" has been fully captured. ");
+			System.out.print(oldPaths.size());
+			System.out.print(" oldPaths and ");
+			System.out.print(newPaths.size());
+			System.out.println(" newPaths.");
+
+
+
+			lengthFullyCaptured++;
+
+			oldPaths = newPaths;
+
+			System.out.print(oldPaths.size());
+			System.out.print(" oldPaths and ");
+			System.out.print(newPaths.size());
+			System.out.println(" newPaths.");
+
+
+		} // while
+
+		// at this point we can trust that the "old" array has everything expected, so just show it
+		// LDFIXE separate out showment & return
+/*
+		for(Day16RoomHistoryPath path : oldPaths) {
+			path.show();
+		} // path for-each
+*/
+	} // showPathsOfLength
+
 }
