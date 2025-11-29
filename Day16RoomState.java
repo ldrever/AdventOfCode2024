@@ -30,12 +30,13 @@ public class Day16RoomState {
 	}
 
 	public void display() {
-		System.out.print("I have just entered room (");
+		System.out.print("(");
 		System.out.print(this.getXCoord());
 		System.out.print(",");
 		System.out.print(this.getYCoord());
-		System.out.print(") facing ");
-		System.out.println(this.getCompassDirection());
+		System.out.print(") ");
+		System.out.print(this.getCompassDirection());
+		System.out.print("; ");
 
 	}
 
@@ -51,39 +52,45 @@ public class Day16RoomState {
 		return this.parentGrid;
 	}
 
-	public void getNeighbours() {
+	public ArrayList<Day16RoomState> getNeighbours(boolean debug) {
+		ArrayList<Day16RoomState> output = new ArrayList<Day16RoomState>();
 
 		for(int extendmentDx = -1; extendmentDx <= 1; extendmentDx++) {
-
 			for(int extendmentDy = -1; extendmentDy <= 1; extendmentDy++) {
 
 				// precisely one must be zero
-
 				if(extendmentDx == 0 && extendmentDy != 0 || extendmentDx != 0 && extendmentDy == 0) {
-
-					// now need to check for valid square
 
 					char cell = this.getParentGrid().getCell(this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy);
 					Day16RoomState newRS;
 
+					// check it's not a wall
 					if(cell != '#') {
 						newRS = new Day16RoomState(this.getParentGrid(), this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy, extendmentDx, extendmentDy);
-						newRS.display();
-					}
 
-					// now need to check for history
+						if(debug) {
+							System.out.print("Neighbour at ");
+							newRS.display();
+							System.out.println(" is not a wall.");
 
-
-				}
-
-
-			}
-
-		}
+						} // debug
 
 
 
+						output.add(newRS);
+					} // wall check
 
-	}
+				} // single step check
+
+			} // dy
+
+		} // dx
+
+		return output;
+	} // getNeighbours
+
+	public boolean matches(Day16RoomState newRS) {
+		return (newRS.getXCoord() == this.getXCoord() && newRS.getYCoord() == this.getYCoord());
+	} // matches
 
 }

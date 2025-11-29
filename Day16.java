@@ -23,7 +23,7 @@ class Day16 {
 		previousBoundary.add(origin);
 		int safetyCounter = 0;
 		int targetScore = 5; // FIXME - WHY?
-
+/*
 		while(safetyCounter < 1) {
 			safetyCounter++;
 			targetScore += turnScore;
@@ -54,7 +54,7 @@ class Day16 {
 
 		}
 
-
+*/
 
 	} // main method // FIXME - shouldn't exist!
 

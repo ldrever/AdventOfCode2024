@@ -4,7 +4,7 @@ import java.io.*;
 public class Day16_Retry{
 
 	public static void main(String[] args) {
-			boolean debug = false;
+			boolean debug = true;
 
 			String filePath = "Y:\\code\\github_mastered\\cloned_2025-11-27\\AdventOfCode2024\\Day16small.dat";
 			Day16LetterGrid lg = null;
@@ -15,10 +15,30 @@ public class Day16_Retry{
 
 			lg.displayArray();
 
-			Day16RoomState start = lg.findStartRoomState(debug);
-			start.getNeighbours();
 
 
+			Day16RoomState start = lg.findStartRoomState(true);
+
+			if(debug) System.out.println("Now to paths");
+
+			/*
+
+				Remember why we need ROOMS and not just any old corridor-cell? It's because...
+				actually I'm not sure any more.
+
+			*/
+
+			Day16RoomHistoryPath rhp = new Day16RoomHistoryPath(start);
+
+			ArrayList<Day16RoomHistoryPath> results = rhp.extend(debug);
+
+			for(Day16RoomHistoryPath result : results) result.display();
+
+			// LDFIXME next up is to recurse and build longer paths
+			// LDFIXME also implement showment on a grid!!
+
+
+			// LDFIXME EVENTUALLY remove the old day16
 	}
 
 }
