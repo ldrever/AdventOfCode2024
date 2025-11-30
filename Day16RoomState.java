@@ -1,24 +1,26 @@
 import java.util.ArrayList;
 public class Day16RoomState {
 
-	/*
-
-		Represent the state of having just entered a particular room
-		from a particular direction.
-
-	*/
-
-	private Day16LetterGrid parentGrid;
-
 	private int xCoord;
 	private int yCoord;
 	private int dxEntry;
 	private int dyEntry;
+	private int costSoFar;
+	private Day16LetterGrid parentGrid;
+
+	/*
+
+		Represent the state of having just entered a particular room
+		from a particular direction. Also keep track of the cost we
+		have incurred so far, by entering this state.
+
+	*/
 
 	public int getXCoord(){return this.xCoord;}
 	public int getYCoord(){return this.yCoord;}
 	public int getDxEntry(){return this.dxEntry;}
 	public int getDyEntry(){return this.dyEntry;}
+	public int getCostSoFar(){return this.costSoFar;}
 
 	public String getCompassDirection() {
 		if(this.dxEntry == 1) return "East";
@@ -48,6 +50,15 @@ public class Day16RoomState {
 		this.dyEntry = dyEntry;
 	}
 
+	public Day16RoomState(Day16LetterGrid parentGrid, int xCoord, int yCoord, int dxEntry, int dyEntry, int costSoFar) {
+		this.parentGrid = parentGrid;
+		this.xCoord = xCoord;
+		this.yCoord = yCoord;
+		this.dxEntry = dxEntry;
+		this.dyEntry = dyEntry;
+		this.costSoFar = costSoFar;
+	}
+
 	public Day16LetterGrid getParentGrid() {
 		return this.parentGrid;
 	}
@@ -64,9 +75,33 @@ public class Day16RoomState {
 					char cell = this.getParentGrid().getCell(this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy);
 					Day16RoomState newRS;
 
+
+					int additionalCost = 1; // for a single step
+					if(extendmentDx == this.getDxEntry() && extendmentDy == this.getDyEntry()) {
+
+
+					} else {
+						additionalCost += 1000; // for a turn
+					}
+
+
+
+
+
+
+
+
+
 					// check it's not a wall
 					if(cell != '#') {
-						newRS = new Day16RoomState(this.getParentGrid(), this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy, extendmentDx, extendmentDy);
+						newRS = new Day16RoomState(
+							  this.getParentGrid()
+							, this.getXCoord() + extendmentDx
+							, this.getYCoord() + extendmentDy
+							, extendmentDx
+							, extendmentDy
+							, this.getCostSoFar() + additionalCost
+							);
 
 						if(debug) {
 							System.out.print("Neighbour at ");

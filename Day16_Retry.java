@@ -41,6 +41,23 @@ public class Day16_Retry{
 					break;
 				}
 
+				/*
+
+					The approach for part 2 will be to keep track of "Viable Winning Elements" -
+					paths that start from a state in one completion zone, and end in the next.
+					I.e., they deliver that destination at minimal cost.
+
+					The process of identifying rooms on ANY winning path is then going to be:
+					-	starting with the LAST complete zone, i.e. the one containing the end
+						room, identify the subset of rooms in the zone before that can get
+						there, and the paths by which they do so
+					-	recursively treat that subset in the same way, and repeat all the way
+						back to the starting square
+
+				*/
+
+
+
 			} // i loop
 
 

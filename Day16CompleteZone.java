@@ -10,6 +10,9 @@ public class Day16CompleteZone {
 		Redefined for 2024 Day 16 Part 2, so that it includes ALL paths
 		that reach a room as cheaply as possible (and within the bounds).
 
+		We will also find it useful to store JUST the heads at the ends
+		of the paths.
+
 	*/
 
 	public Day16CompleteZone(Day16RoomState origin, int min, int max) {
@@ -51,7 +54,8 @@ public class Day16CompleteZone {
 		for(Day16RoomHistoryPath currentPath : this.pathsIntoZone) {
 			for(Day16RoomHistoryPath exploration : currentPath.explore(max)) {
 
-				// min filter
+				// min filter // LDFIXME not sure if this is worth doing, if we say that min will always
+				// be one more than prev max
 				if(exploration.getCost() >= min) output.add(exploration);
 
 			} // loop over this path's explorations
@@ -81,7 +85,7 @@ public class Day16CompleteZone {
 					if(output.get(i).getCost() > output.get(j).getCost()) {
 						output.set(i, output.get(j));
 					} // j-cheaper condition
-					output.remove(j); // LDFIXME NOTE THAT THIS KILLS OFF EQUAL-COST PATHS
+						output.remove(j);
 				} // matching costs condition
 			} // j loop
 		} // i loop

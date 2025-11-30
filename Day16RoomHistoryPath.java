@@ -23,7 +23,7 @@ public class Day16RoomHistoryPath {
 	private ArrayList<Day16RoomState> history;
 	private int cost;
 
-	public int getCost() {return this.cost;}
+	public int getCost() {return this.getHead().getCostSoFar();} // LDFIXME "so far" a useful part of the name?
 
 	public Day16RoomHistoryPath(Day16RoomState start) {
 		this.history = new ArrayList<Day16RoomState>();
@@ -42,12 +42,12 @@ public class Day16RoomHistoryPath {
 	}
 
 
-
+/*
 	private void setCost(int newCost){this.cost = newCost;}
-
+*/
 	// should really be private, but used to form an invalid path purely
 	// for showing the frontier
-	public void addRoomWithoutCostUpdate(Day16RoomState newHead) {
+	public void addRoomWithoutCostUpdate(Day16RoomState newHead) { // LDFIXME probably fine now that costs outsourced ie rename
 		this.history.add(newHead);
 	} // addRoomWithoutCostUpdate
 
@@ -55,7 +55,7 @@ public class Day16RoomHistoryPath {
 
 	public Day16RoomHistoryPath clone() {
 		Day16RoomHistoryPath output = new Day16RoomHistoryPath();
-		output.setCost(this.getCost());
+		// output.setCost(this.getCost());
 
 		for(Day16RoomState myHistoryItem : this.history) {
 			output.addRoomWithoutCostUpdate(myHistoryItem);
@@ -118,6 +118,7 @@ public class Day16RoomHistoryPath {
 				} // debug
 				Day16RoomHistoryPath newPath = this.clone();
 				newPath.addRoomWithoutCostUpdate(candidateNeighbour);
+				/* // LDFIXME outsourced to room-level
 				int additionalCost = 1; // for a single step
 				if(candidateNeighbour.getDxEntry() == head.getDxEntry() && candidateNeighbour.getDyEntry() == head.getDyEntry()) {
 
@@ -128,6 +129,7 @@ public class Day16RoomHistoryPath {
 
 
 				newPath.setCost(additionalCost + this.getCost());
+				*/
 				output.add(newPath);
 
 			} // plausibleCandidate
