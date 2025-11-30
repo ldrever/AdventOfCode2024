@@ -5,7 +5,7 @@ public class Day16_Retry{
 
 	public static void main(String[] args) {
 
-			boolean debug = true;
+			boolean debug = false;
 
 			String filePath = "Y:\\code\\github_mastered\\cloned_2025-11-27\\AdventOfCode2024\\Day16small.dat";
 			Day16LetterGrid lg = null;
@@ -14,7 +14,7 @@ public class Day16_Retry{
 			}
 			catch (Exception e) {System.out.println("file processing error");}
 
-			lg.display();
+			//lg.display();
 
 			Day16RoomState start = lg.findStartRoomState(true);
 
@@ -25,6 +25,7 @@ public class Day16_Retry{
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
 				newZone = currentZone.buildNewZone(min, max);
+				//newZone.show();
 				System.out.print("Here are all endpoints reachable with least cost between ");
 				System.out.print(min);
 				System.out.print(" and ");

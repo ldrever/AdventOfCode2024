@@ -41,7 +41,7 @@ public class Day16RoomState {
 		System.out.print("; ");
 
 	}
-
+/*
 	public Day16RoomState(Day16LetterGrid parentGrid, int xCoord, int yCoord, int dxEntry, int dyEntry) {
 		this.parentGrid = parentGrid;
 		this.xCoord = xCoord;
@@ -49,7 +49,7 @@ public class Day16RoomState {
 		this.dxEntry = dxEntry;
 		this.dyEntry = dyEntry;
 	}
-
+*/
 	public Day16RoomState(Day16LetterGrid parentGrid, int xCoord, int yCoord, int dxEntry, int dyEntry, int costSoFar) {
 		this.parentGrid = parentGrid;
 		this.xCoord = xCoord;
@@ -75,7 +75,6 @@ public class Day16RoomState {
 					char cell = this.getParentGrid().getCell(this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy);
 					Day16RoomState newRS;
 
-
 					int additionalCost = 1; // for a single step
 					if(extendmentDx == this.getDxEntry() && extendmentDy == this.getDyEntry()) {
 
@@ -83,12 +82,6 @@ public class Day16RoomState {
 					} else {
 						additionalCost += 1000; // for a turn
 					}
-
-
-
-
-
-
 
 
 
@@ -127,6 +120,10 @@ public class Day16RoomState {
 	public boolean matches(Day16RoomState newRS) {
 		return (newRS.getXCoord() == this.getXCoord() && newRS.getYCoord() == this.getYCoord());
 	} // matches
+
+	public boolean matchesPositionAndDirection(Day16RoomState newRS) {
+		return this.matches(newRS) && this.getDxEntry() == newRS.getDxEntry() && this.getDyEntry() == newRS.getDyEntry();
+	}
 
 
 	// LDFIXME why can't this handle an input of 3, but 2 is fine?
@@ -190,6 +187,58 @@ public class Day16RoomState {
 		} // path for-each
 */
 	} // showPathsOfLength
+
+
+
+
+	public ArrayList<Day16RoomHistoryPath> explore(int max) {
+		/*
+
+			Starting from a roomstate, find PATHS for its children, and their children,
+			and so on recursively until we guarantee that EVERY such descendant-reaching
+			path - as long as its cost lies in the bounds provided - is included.
+
+			It is possible that the output could include multiple different paths
+			that end at the same cell.
+
+			It doesn't include the originating path.
+
+		*/
+
+
+		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
+
+		// generation zero will be our input room
+		ArrayList<Day16RoomHistoryPath> nextGeneration = new ArrayList<Day16RoomHistoryPath>();
+		nextGeneration.add(new Day16RoomHistoryPath(this));
+		while(nextGeneration.size() > 0)
+		{
+			ArrayList<Day16RoomHistoryPath> currentGeneration = nextGeneration;
+			nextGeneration = new ArrayList<Day16RoomHistoryPath>();
+
+			for(Day16RoomHistoryPath path : currentGeneration) {
+				ArrayList<Day16RoomHistoryPath> currentChildren = path.extend(false);
+
+				for(Day16RoomHistoryPath child : currentChildren) {
+					if(child.getCost() <= max) {
+						nextGeneration.add(child);
+						output.add(child);
+					}
+
+				} // child for-each
+
+
+			} // for-each
+
+
+
+		} // while
+
+		return output;
+
+	} //explore
+
+
 
 	public boolean isEnd() {
 		return (this.parentGrid.getCell(xCoord, yCoord) == 'E');

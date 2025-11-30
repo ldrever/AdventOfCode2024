@@ -83,7 +83,7 @@ public class Day16LetterGrid {
 				char cellChar = this.getCell(X,Y);
 				if(cellChar == 'S') {
 					if (debug) System.out.println("New map. deer starts at (" + X + ", " + Y + ")");
-					return new Day16RoomState(this, X, Y, 1, 0); // start facing east
+					return new Day16RoomState(this, X, Y, 1, 0, 0); // start facing east; cost is zero
 				}
 			}
 		}

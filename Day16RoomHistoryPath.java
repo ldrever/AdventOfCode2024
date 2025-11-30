@@ -9,8 +9,6 @@ public class Day16RoomHistoryPath {
 		Each room is captured along with the direction by which it
 		was ENTERED.
 
-		And the cost of the entire path is tracked.
-
 		Note that no room ever appears twice in one of these.
 
 		If we enter some room from one direction, but leave it in a
@@ -21,19 +19,20 @@ public class Day16RoomHistoryPath {
 	*/
 
 	private ArrayList<Day16RoomState> history;
-	private int cost;
+//	private int cost;
 
 	public int getCost() {return this.getHead().getCostSoFar();} // LDFIXME "so far" a useful part of the name?
+	public ArrayList<Day16RoomState> getHistory() {return this.history;}
 
 	public Day16RoomHistoryPath(Day16RoomState start) {
 		this.history = new ArrayList<Day16RoomState>();
 		this.history.add(start);
-		this.cost = 0;
+	//	this.cost = 0;
 	} // known-first-room constructor
 
 	public Day16RoomHistoryPath() {
 		this.history = new ArrayList<Day16RoomState>();
-		this.cost = 0;
+	//	this.cost = 0;
 	} // empty-path constructor
 
 	// we'll say that the tail is at the start
@@ -157,7 +156,7 @@ public class Day16RoomHistoryPath {
 
 
 
-	public ArrayList<Day16RoomHistoryPath> explore(int max) {
+	//public ArrayList<Day16RoomHistoryPath> explore(int max) {
 		/*
 
 			Starting from one given path, find its children, and their children,
@@ -171,7 +170,7 @@ public class Day16RoomHistoryPath {
 
 		*/
 
-
+/*
 		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
 
 		// generation zero will be our input path
@@ -203,4 +202,5 @@ public class Day16RoomHistoryPath {
 		return output;
 
 	} //explore
+	*/
 } // class
