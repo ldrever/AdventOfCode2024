@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 
 public class Day16CompleteZone {
+	private int min;
+	private int max;
+	private ArrayList<Day16RoomHistoryPath> pathsIntoZone;
+	private ArrayList<Day16RoomState> ancestorZone;
 	/*
-
-		// LDFIXME inclusive exclusive
 
 		Defined such that EVERY room that's POSSIBLY reachable
 		with min <= cost <= max is represented here precisely ONCE,
@@ -13,26 +15,20 @@ public class Day16CompleteZone {
 
 	*/
 
-	// LDFIXME inclusive exclusive
-	private int min; // inclusive
-	private int max; // inclusive
-	private ArrayList<Day16RoomHistoryPath> validPaths;
-	private ArrayList<Day16RoomState> forbiddenZone;
-
 	public Day16CompleteZone(Day16RoomState origin, int min, int max) {
 		this.min = min;
 		this.max = max;
-		this.validPaths = new ArrayList<Day16RoomHistoryPath>();
-		validPaths.add(new Day16RoomHistoryPath(origin));
-		this.forbiddenZone = new ArrayList<Day16RoomState>(); // empty at this point
+		this.pathsIntoZone = new ArrayList<Day16RoomHistoryPath>();
+		pathsIntoZone.add(new Day16RoomHistoryPath(origin));
+		this.ancestorZone = new ArrayList<Day16RoomState>(); // empty at this point
 
 	} // origin constructor
 
-	private Day16CompleteZone(int newMin, int newMax, ArrayList<Day16RoomHistoryPath> newPaths, ArrayList<Day16RoomState> newForbiddenZone) {
+	private Day16CompleteZone(int newMin, int newMax, ArrayList<Day16RoomHistoryPath> newPaths, ArrayList<Day16RoomState> forbiddenZone) {
 		this.min = newMin;
 		this.max = newMax;
-		this.validPaths = newPaths;
-		this.forbiddenZone = newForbiddenZone;
+		this.pathsIntoZone = newPaths;
+		this.ancestorZone = forbiddenZone;
 
 	} // private constructor
 
@@ -40,7 +36,7 @@ public class Day16CompleteZone {
 
 		// slightly dirty, because it's not a path really, but a collection of end-points
 		Day16RoomHistoryPath showZone = new Day16RoomHistoryPath();
-		for(Day16RoomHistoryPath validPath : this.validPaths) {
+		for(Day16RoomHistoryPath validPath : this.pathsIntoZone) {
 			showZone.addRoomWithoutCostUpdate(validPath.getHead());
 
 		} // valid loop
@@ -48,89 +44,66 @@ public class Day16CompleteZone {
 
 	} // show
 
+
+
 	public Day16CompleteZone buildNewZone(int min, int max) {
 		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
 
-		for(Day16RoomHistoryPath currentPath : this.validPaths) {
-
-			// starting from the paths inside this zone, extend them onwards
-			// explore function implements the max filter
+		// starting from the paths into this zone, extend them onwards
+		// (the explore function implements the max filter)
+		for(Day16RoomHistoryPath currentPath : this.pathsIntoZone) {
 			for(Day16RoomHistoryPath exploration : currentPath.explore(max)) {
 
-				// min filter //LDFIXME INCLUSIVE EXCLUSIVE
-				if(exploration.getCost() >= min) {
-					output.add(exploration);
+				// min filter
+				if(exploration.getCost() >= min) output.add(exploration);
 
-				}
+			} // loop over this path's explorations
+		} // loop over paths in the zone
 
-			} // loop over explorations
+		// filter so that we can't dip into the current zone or the ancestor zone - any path that
+		// did so would be outcompeted by a path that simply came FROM the site of the dip
+		ArrayList<Day16RoomState> forbiddenZone = new ArrayList<Day16RoomState>();
+		for(Day16RoomState ancestorState : ancestorZone) forbiddenZone.add(ancestorState);
+		for(Day16RoomHistoryPath currentPath : this.pathsIntoZone) forbiddenZone.add(currentPath.getHead());
 
-		} // loop over current zone
-
-		// filter so that we can't go back into the current zone we're using to build the new zone
-		// not only can the HEAD not be in the current zone - no new path-piece can. Because if we
-		// had a valid path for the next zone that needed to take even ONE further step inside THIS
-		// zone, it would be beatable by a path starting FROM that step
-
-		// in fact, we'll also need to check the previous zone...
-		ArrayList<Day16RoomState> newForbiddenZone = new ArrayList<Day16RoomState>();
-		for(Day16RoomState parent : forbiddenZone) newForbiddenZone.add(parent);
-		for(Day16RoomHistoryPath currentPath : this.validPaths) newForbiddenZone.add(currentPath.getHead());
-
-
-		for(Day16RoomState forbiddenRoom : newForbiddenZone) {
-
+		for(Day16RoomState forbiddenState : forbiddenZone) {
 			for(int outputIndex = output.size() - 1; outputIndex >= 0; outputIndex--) {
-
-				if(forbiddenRoom.matches(output.get(outputIndex).getHead())) {
-
+				if(forbiddenState.matches(output.get(outputIndex).getHead())) {
 					output.remove(outputIndex);
+				} // match check
+			} // output checking loop
+		} // forbidden states loop
 
-
-				}
-
-
-			} // down-counting integer loop because it can remove what it's looking at
-
-		} // current zone loop
-
-		// LDFIXME ok need to prune for cheapestness here. also, above not yet checked wrt basic working or not...
-
+		// starting at zero, we'll gradually make every member of output be the cheapest possible
 		for (int i = 0; i < output.size(); i++) {
-			// starting at zero, we'll gradually make every member of output be the cheapest possible
-
+			// it'll always be the j one that gets removed, so do these working downwards
 			for(int j = output.size() - 1; j > i; j--) {
-				// it'll always be the j one that gets removed, so do these working downwards
 
-				// so let's say that after every comparison with a match, the cheaper survivor will be
-				// assigned to the i version
+				// after every comparison with a match, the cheaper survivor will be i, not j
 				if(output.get(i).getHead().matches(output.get(j).getHead())) {
 					if(output.get(i).getCost() > output.get(j).getCost()) {
 						output.set(i, output.get(j));
-
 					} // j-cheaper condition
-					output.remove(j);
+					output.remove(j); // LDFIXME NOTE THAT THIS KILLS OFF EQUAL-COST PATHS
 				} // matching costs condition
 			} // j loop
 		} // i loop
-		ArrayList<Day16RoomState> newParents = new ArrayList<Day16RoomState>();
-		for(Day16RoomHistoryPath path : this.validPaths) newParents.add(path.getHead());
-		for(Day16RoomState oldForbiddenRoom : this.forbiddenZone) newParents.add(oldForbiddenRoom);
-		return new Day16CompleteZone(min, max, output, newParents);
+		return new Day16CompleteZone(min, max, output, forbiddenZone);
 
 	} // buildNewZone
 
+
+
 	public int getEndCost() {
-		for(Day16RoomHistoryPath path : this.validPaths) {
+		for(Day16RoomHistoryPath path : this.pathsIntoZone) {
 
 			if(path.getHead().isEnd()) {
 				path.show();
 				return path.getCost();
-
-			} // end-head
+			} // end-check
 
 		} // path loop
 		return -1;
-	} // containsEnd
+	} // getEndCost
 
 } // class
