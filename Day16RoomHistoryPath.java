@@ -24,6 +24,7 @@ public class Day16RoomHistoryPath {
 	private int cost;
 
 	public int getCost() {return this.cost;}
+	public ArrayList<Day16RoomState> getHistory() {return this.history;}
 
 	public Day16RoomHistoryPath(Day16RoomState start) {
 		this.history = new ArrayList<Day16RoomState>();
@@ -201,4 +202,5 @@ public class Day16RoomHistoryPath {
 		return output;
 
 	} //explore
+
 } // class

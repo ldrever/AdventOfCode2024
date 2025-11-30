@@ -1,10 +1,14 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Day16CompleteZone {
 	private int min;
 	private int max;
 	private ArrayList<Day16RoomHistoryPath> pathsIntoZone;
 	private ArrayList<Day16RoomState> ancestorZone;
+
+	public ArrayList<Day16RoomHistoryPath> getPathsIntoZone() {return this.pathsIntoZone;}
+	public int getMax() {return this.max;}
 	/*
 
 		Defined such that EVERY room that's POSSIBLY reachable
@@ -105,5 +109,64 @@ public class Day16CompleteZone {
 		} // path loop
 		return -1;
 	} // getEndCost
+
+	public void restrictToWinners() {
+		for (int i = this.pathsIntoZone.size() - 1; i >= 0; i--) {
+			if(this.pathsIntoZone.get(i).getHead().isEnd()) {
+				//System.out.println("Preserving this winning path:");
+				//pathsIntoZone.get(i).show();
+			} else {
+				//System.out.println("Killing this losing path:");
+				//pathsIntoZone.get(i).show();
+				this.pathsIntoZone.remove(i);
+			}
+		} // path loop
+	} // restrictToWinners
+
+	public ArrayList<Day16RoomState> restrictToHigherZoneReachers(Day16CompleteZone higherZone) {
+		ArrayList<Day16RoomState> output = new ArrayList<Day16RoomState>(); // things going BEYOND this zone
+
+		HashSet<Day16RoomHistoryPath> validHash = new HashSet<Day16RoomHistoryPath>();
+		ArrayList<Day16RoomState> demandedZone = new ArrayList<Day16RoomState>();
+		for(Day16RoomHistoryPath pathIntoHigherZone : higherZone.getPathsIntoZone()) {
+			demandedZone.add(pathIntoHigherZone.getHead());
+		}
+
+		// starting from the paths into this zone, extend them onwards
+		// (the explore function implements the max filter)
+		for(Day16RoomHistoryPath currentPath : this.pathsIntoZone) {
+			for(Day16RoomHistoryPath exploration : currentPath.explore(higherZone.getMax())) {
+				for(Day16RoomState demandedSpot : demandedZone) {
+					if(exploration.getHead().matches(demandedSpot)) {
+
+						// firstly, means we can keep it:
+						validHash.add(currentPath);
+
+						// secondly, means its cells are part of the final answer
+						for(Day16RoomState rs : exploration.getHistory()) {
+							output.add(rs);
+						}
+
+						break;
+
+
+
+					} // match check
+				} // demanded loop
+			} // loop over this path's explorations
+		} // loop over paths in this zone
+
+
+		for(int i = this.pathsIntoZone.size() - 1; i >= 0; i--) {
+			if(validHash.contains(this.pathsIntoZone.get(i))) {
+
+				// keep it
+			} else {
+				this.pathsIntoZone.remove(i);
+			}
+
+		}
+		return output;
+	} // restrictToHigherZoneReachers
 
 } // class

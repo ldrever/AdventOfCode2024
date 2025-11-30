@@ -29,6 +29,11 @@ public class Day16RoomState {
 
 	}
 
+	public String toString() {
+		return "(" + this.getXCoord() + ", " + this.getYCoord() + ")";
+
+	}
+
 	public void display() {
 		System.out.print("(");
 		System.out.print(this.getXCoord());
