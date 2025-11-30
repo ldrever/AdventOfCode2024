@@ -118,7 +118,19 @@ public class Day16CompleteZone {
 		for(Day16RoomState oldForbiddenRoom : this.forbiddenZone) newParents.add(oldForbiddenRoom);
 		return new Day16CompleteZone(min, max, output, newParents);
 
+	} // buildNewZone
 
-	}
+	public int getEndCost() {
+		for(Day16RoomHistoryPath path : this.validPaths) {
+
+			if(path.getHead().isEnd()) {
+				path.show();
+				return path.getCost();
+
+			} // end-head
+
+		} // path loop
+		return -1;
+	} // containsEnd
 
 } // class

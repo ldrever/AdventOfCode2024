@@ -75,7 +75,7 @@ public class Day16_Retry{
 
 			Day16CompleteZone newZone = new Day16CompleteZone(start, 0, 0);
 			int interval = 1001;
-			for(int i = 1; i < 10; i++) {
+			for(int i = 1; ; i++) {
 				Day16CompleteZone currentZone = newZone;
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
@@ -84,7 +84,17 @@ public class Day16_Retry{
 				System.out.print(min);
 				System.out.print(" and ");
 				System.out.println(max);
-				newZone.show();
+
+
+				int endCost = newZone.getEndCost();
+
+				if(endCost != -1) {
+
+
+					System.out.print("FINAL COST: ");
+					System.out.println(endCost);
+					break;
+				}
 
 			} // i loop
 

@@ -156,4 +156,9 @@ public class Day16RoomState {
 */
 	} // showPathsOfLength
 
+	public boolean isEnd() {
+		return (this.parentGrid.getCell(xCoord, yCoord) == 'E');
+
+	} // isEnd
+
 }
