@@ -1,6 +1,24 @@
 import java.util.ArrayList;
 
 public class Day16RoomHistoryPath {
+	/*
+
+		Captures a sequence of room-inhabitations through the maze,
+		and the cost of each.
+
+		Each room is captured along with the direction by which it
+		was ENTERED.
+
+		And the cost of the entire path is tracked.
+
+		Note that no room ever appears twice in one of these.
+
+		If we enter some room from one direction, but leave it in a
+		different direction, then the fact that we have turned is
+		captured by the fact that the second room was entered from
+		that different direction.
+
+	*/
 
 	private ArrayList<Day16RoomState> history;
 	private int cost;
@@ -25,10 +43,11 @@ public class Day16RoomHistoryPath {
 
 
 
-	// private methods that must be used together
 	private void setCost(int newCost){this.cost = newCost;}
 
-	private void addRoomWithoutCostUpdate(Day16RoomState newHead) {
+	// should really be private, but used to form an invalid path purely
+	// for showing the frontier
+	public void addRoomWithoutCostUpdate(Day16RoomState newHead) {
 		this.history.add(newHead);
 	} // addRoomWithoutCostUpdate
 
@@ -50,6 +69,7 @@ public class Day16RoomHistoryPath {
 		System.out.println(); // because the above stays on a single line
 
 	} // display
+	// LDFIXME rename ST graphical and textal display are more obvious
 
 	public ArrayList<Day16RoomHistoryPath> extend(boolean debug) {
 		if(debug) {
@@ -98,7 +118,16 @@ public class Day16RoomHistoryPath {
 				} // debug
 				Day16RoomHistoryPath newPath = this.clone();
 				newPath.addRoomWithoutCostUpdate(candidateNeighbour);
-				newPath.setCost(0); // LDFIXME
+				int additionalCost = 1; // for a single step
+				if(candidateNeighbour.getDxEntry() == head.getDxEntry() && candidateNeighbour.getDyEntry() == head.getDyEntry()) {
+
+
+				} else {
+					additionalCost += 1000; // for a turn
+				}
+
+
+				newPath.setCost(additionalCost + this.getCost());
 				output.add(newPath);
 
 			} // plausibleCandidate
@@ -118,5 +147,58 @@ public class Day16RoomHistoryPath {
 
 
 		newGrid.display();
+
+		System.out.print("Cost: ");
+		System.out.println(this.getCost());
+
 	} // show
+
+
+
+	public ArrayList<Day16RoomHistoryPath> explore(int max) {
+		/*
+
+			Starting from one given path, find its children, and their children,
+			and so on recursively until we guarantee that EVERY such descendant
+			path - as long as its cost lies in the bounds provided - is included.
+
+			It is possible that the output could include multiple different paths
+			that end at the same cell.
+
+			It doesn't include the originating path.
+
+		*/
+
+
+		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
+
+		// generation zero will be our input path
+		ArrayList<Day16RoomHistoryPath> nextGeneration = new ArrayList<Day16RoomHistoryPath>();
+		nextGeneration.add(this);
+		while(nextGeneration.size() > 0)
+		{
+			ArrayList<Day16RoomHistoryPath> currentGeneration = nextGeneration;
+			nextGeneration = new ArrayList<Day16RoomHistoryPath>();
+
+			for(Day16RoomHistoryPath path : currentGeneration) {
+				ArrayList<Day16RoomHistoryPath> currentChildren = path.extend(false);
+
+				for(Day16RoomHistoryPath child : currentChildren) {
+					if(child.getCost() <= max) {
+						nextGeneration.add(child);
+						output.add(child);
+					}
+
+				} // child for-each
+
+
+			} // for-each
+
+
+
+		} // while
+
+		return output;
+
+	} //explore
 } // class

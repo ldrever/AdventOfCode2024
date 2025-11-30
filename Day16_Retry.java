@@ -20,13 +20,13 @@ public class Day16_Retry{
 
 
 			Day16RoomState start = lg.findStartRoomState(true);
-
-			if(debug) System.out.println("Now to paths");
+/*
+			if(debug) System.out.println("Now to paths?");
 
 			ArrayList<Day16RoomHistoryPath> p1 = new ArrayList<Day16RoomHistoryPath>();
 
 			p1.add(new Day16RoomHistoryPath(start));
-/*			p1.show();
+		p1.show();
 
 			Day16RoomHistoryPath p2 = p1.extend(false).get(0);
 			p2.show();
@@ -38,7 +38,8 @@ public class Day16_Retry{
 			p4.show();
 */
 
-			for(int i = 1; i < 87; i++) {
+/*
+			for(int i = 1; i < 4; i++) {
 				ArrayList<Day16RoomHistoryPath> extendedness = new ArrayList<Day16RoomHistoryPath>();
 				for(Day16RoomHistoryPath p : p1) {
 					//p.show();
@@ -58,9 +59,41 @@ public class Day16_Retry{
 
 			} // loop
 
+
 				for(Day16RoomHistoryPath p : p1) p.show();
 
 
+
+
+
+			Day16CompleteZone z2 = originZone.buildNewZone(1, 2000);
+			z2.show();
+			Day16CompleteZone z3 = z2.buildNewZone(2001, 3000);
+			z3.show();
+*/
+
+
+			Day16CompleteZone newZone = new Day16CompleteZone(start, 0, 0);
+			int interval = 1001;
+			for(int i = 1; i < 10; i++) {
+				Day16CompleteZone currentZone = newZone;
+				int min = 1 + (i-1) * 1001;
+				int max = 1001 * i;
+				newZone = currentZone.buildNewZone(min, max);
+				System.out.print("Here are all endpoints reachable with least cost between ");
+				System.out.print(min);
+				System.out.print(" and ");
+				System.out.println(max);
+				newZone.show();
+
+			} // i loop
+
+
+/*
+			ArrayList<Day16RoomHistoryPath> explorations = new Day16RoomHistoryPath(start).explore(1980);
+
+			for(Day16RoomHistoryPath discovery : explorations) discovery.show();
+*/
 			//start.showPathsOfLength(3);
 
 			/*
