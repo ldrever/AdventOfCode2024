@@ -7,11 +7,8 @@ public class Day16CompleteZone {
 	private ArrayList<Day16RoomState> ancestorZone;
 	/*
 
-		Defined such that EVERY room that's POSSIBLY reachable
-		with min <= cost <= max is represented here precisely ONCE,
-		by being the head of one of these paths - none of which is
-		beatable by a cheaper path that ends in its head room.
-		(Matchable yes, beatable no.)
+		Redefined for 2024 Day 16 Part 2, so that it includes ALL paths
+		that reach a room as cheaply as possible (and within the bounds).
 
 	*/
 
@@ -24,11 +21,11 @@ public class Day16CompleteZone {
 
 	} // origin constructor
 
-	private Day16CompleteZone(int newMin, int newMax, ArrayList<Day16RoomHistoryPath> newPaths, ArrayList<Day16RoomState> forbiddenZone) {
-		this.min = newMin;
-		this.max = newMax;
-		this.pathsIntoZone = newPaths;
-		this.ancestorZone = forbiddenZone;
+	private Day16CompleteZone(int min, int max, ArrayList<Day16RoomHistoryPath> pathsIntoZone, ArrayList<Day16RoomState> ancestorZone) {
+		this.min = min;
+		this.max = max;
+		this.pathsIntoZone = pathsIntoZone;
+		this.ancestorZone = ancestorZone;
 
 	} // private constructor
 
