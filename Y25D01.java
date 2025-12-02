@@ -25,9 +25,26 @@ class Y25D01 {
 		for(String inputLine : inputLines) {
 			String direction = inputLine.substring(0,1);
 			int adjustment = Integer.parseInt(inputLine.substring(1)); // LDFIXME LEARNT that can take a single argument to do "all BUT left"
-			if(direction.equalsIgnoreCase("L")) adjustment *= -1;
-			position += adjustment;
 
+
+			// OK let's do it the stupid way, seeing as the clever way isn't getting there...
+			int movement = 1;
+			if(direction.equalsIgnoreCase("L")) movement *= -1;
+
+			for(int i = 0; i < adjustment; i++) {
+				position += movement;
+				position %= 100;
+				if(position == 0) zeroCount++;
+			}
+
+			// DAMMIT that worked - how's the proper way going wrong? guess need to build a yad that keeps a running difference tween them, to REALLY grok the blem..
+
+			// position += adjustment;
+
+
+
+
+/*
 			if(problemPart == 2) {
 				if(adjustment > 0) {
 					while(position > 100) {
@@ -47,7 +64,7 @@ class Y25D01 {
 
 			position %= 100;
 			if (position == 0) zeroCount++;
-
+*/
 			// LDFIXME
 			// REN REPO
 			// REN OLD FILE
