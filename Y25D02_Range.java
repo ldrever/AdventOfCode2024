@@ -41,43 +41,52 @@ class Y25D02_Range {
 	} // toString
 
 
-	public static boolean isValid(long input) {
+	public static boolean isValid(long input, int repeatCount) {
 		int digitCount = 0;
 
 		for(long comparator = 1L; comparator <= input; comparator *= 10L) {
 			digitCount++;
 		}
-		// immediately rule out numbers of an odd digit count
-		if(digitCount % 2 != 0) return false;
+		// immediately rule out numbers of a non-multiple digit count
+		if(digitCount % repeatCount != 0) return false;
 
-		long relevantTenPower = (long) Math.pow(10, digitCount / 2);
-		long lhs = input / relevantTenPower;
-		long rhs = input % relevantTenPower;
+		long relevantTenPower = (long) Math.pow(10, digitCount / repeatCount);
 
-		return lhs == rhs;
+		ArrayList<Long> numberParts = new ArrayList<Long>();
+
+		while(input > relevantTenPower) {
+			long newNumberPart = input % relevantTenPower;
+			for(long numberPart : numberParts) {
+				if(numberPart != newNumberPart) return false;
+			}
+			numberParts.add(newNumberPart);
+			input /= relevantTenPower;
+
+		}
+		return true;
 
 	}
+// ldfixme we are going to need to be careful not to double-count e.g. 4-valids as also being 2-valids...
 
 
-
-	// by virtue of having an even number of digits, any integer whose decimal
-	// representation consists of one string of digits repeated twice must lie between
-	// 10^(2n-1) and 10^(2n) - 1, for some positive integer n
-	// (e.g. 22 lies between 10^1 and 99, for n = 1)
+	// by virtue of having a number of digits that's a multiple of N, any integer whose decimal
+	// representation consists of one string of digits repeated N times must lie between
+	// 10^(N * k - 1) and 10^(N * k) - 1, for some positive integer k
+	// (e.g. 555 lies between 10^(3 - 1) and 10^3 - 1, for N=3 and k = 1)
 
 	// so let's start with the task of transforming any given range into zero or more
 	// "attackable" ranges, such that any of those has the following properties:
-	// 		- it starts with a number that has an even number of digits
-	//		- it ends with a number that has an even number of digits
+	// 		- it starts with a number that has an N-multiple of digits
+	//		- it ends with a number that has an N-multiple of digits
 
-	public ArrayList<Y25D02_Range> breakup() {
+	public ArrayList<Y25D02_Range> breakup(int N) {
 
 		ArrayList<Y25D02_Range> output = new ArrayList<Y25D02_Range>();
 		ArrayList<Long> powersOfTen = this.tenPowersWithin();
 
 		// burn away the case where min = max
 		if(this.min == this.max) {
-			if (isValid(this.min)) {
+			if (isValid(this.min, 2)) {
 				output.add(this);
 			}
 			return output;
@@ -87,33 +96,33 @@ class Y25D02_Range {
 		if(powersOfTen.size() > 0) {
 			if(powersOfTen.get(0) == this.min)  {// thanks to the case above we know there's a second value
 				Y25D02_Range revisedRange = new Y25D02_Range(this.min + 1, this.max);
-				return revisedRange.breakup();
+				return revisedRange.breakup(N);
 			}
 
 			if(powersOfTen.get(0) == this.max)  {
 				Y25D02_Range revisedRange = new Y25D02_Range(this.min, this.max - 1);
-				return revisedRange.breakup();
+				return revisedRange.breakup(N);
 			}
 		}
 
-		// burn away any chunk at the start of the range that is odd-digitted
-		if(this.getOpeningDigitCount() % 2 == 1) {
-			if(powersOfTen.size() == 0) return output; // the no-even-digits empty case
-			Y25D02_Range revisedRange = new Y25D02_Range(powersOfTen.get(0), this.max); // digit count check means we can trust the next power to be an odd power, ie starting off a region of even digits
-			return revisedRange.breakup();
-		} // odd count check
+		// burn away any chunk at the start of the range that is not multiply-digitted
+		if(this.getOpeningDigitCount() % N != 0) {
+			if(powersOfTen.size() == 0) return output; // the no-multiple-digits empty case
+			Y25D02_Range revisedRange = new Y25D02_Range(powersOfTen.get(0), this.max); // eventually this will get us running on a range that begins with a desired multiple as its digit count
+			return revisedRange.breakup(N);
+		} // opening digit count check
 
 		if(powersOfTen.size() > 0) {
-
+			// after that burning, we now trust that we start with N*k digits for some k
 			// mainstream case - return an array that includes everything UP to & exclusing that power, followed by the recursive answer to what's left
 			Y25D02_Range head = new Y25D02_Range(this.min, powersOfTen.get(0) - 1);
 			Y25D02_Range rump = new Y25D02_Range(powersOfTen.get(0), this.max); // tempting to add 1, knowing that a ten-power can't repeat, BUT that might EQUAL max
-			output = rump.breakup();
+			output = rump.breakup(N);
 			output.add(0, head);
 			return output;
 
 		} else {
-			// even digits at start and no powers of ten means we can
+			// N*k digits at start and no powers of ten means we can
 			// rubber-stamp the whole input as an attackable range
 			output.add(this);
 			return output;
