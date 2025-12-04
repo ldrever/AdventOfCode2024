@@ -130,13 +130,22 @@ class Y25D02_Range {
 
 	} // breakup
 
-	// OK now we can trust we're in an attackable range - same, even number of digits at start and end
-	public ArrayList<Long> findValidMembers() {
+	// OK now we can trust we're in an attackable range - same number of digits at start and end
+	// and this number being a multiple of N
+	public ArrayList<Long> findValidMembers(int N) {
 		ArrayList<Long> output = new ArrayList<Long>();
 
-		// a repeater is just a multiple of some "root" number of the form 10^n + 1.
-		// e.g. 1001 * 123 = 123123
-		long root = 1L + (long) Math.pow(10, this.getOpeningDigitCount() / 2);
+		// When N = 2, a repeater is just a multiple of some "root" number of the form 10^n + 1.
+		// E.g. 1001 * 123 = 123123
+
+		// For more general N, it will be the sum of 10^ik, where i ranges from N-1 to 0, and
+		// k is the digit count of the repeating portion.
+		// E.g. for N=3 and k=2, our root is 10^4 + 10^2 + 10^0 = 10101
+		long root = 0L;
+		int digitCountOfRepeater = this.getOpeningDigitCount() / N;
+		for(int i = 0; i < N; i++) {
+			root += (long) Math.pow(10, i * digitCountOfRepeater);
+		}
 
 		// easier to do it this way
 		this.max -= (this.max % root);
