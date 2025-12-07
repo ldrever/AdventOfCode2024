@@ -135,6 +135,7 @@ public class Day16CompleteZone {
 
 
 	public int getEndCost() {
+		ArrayList<Day16RoomHistoryPath> candidates = new ArrayList<Day16RoomHistoryPath>();
 		int bestScore = -1;
 
 		for(Day16RoomHistoryPath path : this.pathsIntoZone) {
@@ -145,6 +146,7 @@ public class Day16CompleteZone {
 
 				if(newScore < bestScore || bestScore == -1) {
 					bestScore = newScore;
+					candidates.add(path);
 
 				}
 
@@ -153,6 +155,12 @@ public class Day16CompleteZone {
 			} // end-check
 
 		} // path loop
+
+		for(Day16RoomHistoryPath candidate : candidates) {
+			if(candidate.getCost() == bestScore) candidate.show();
+
+		}
+
 		return bestScore;
 	} // getEndCost
 
