@@ -36,9 +36,10 @@ public class Day16RoomState {
 		System.out.print(this.getXCoord());
 		System.out.print(",");
 		System.out.print(this.getYCoord());
-		System.out.print(") ");
+		System.out.print("), entered heading ");
 		System.out.print(this.getCompassDirection());
-		System.out.print("; ");
+		System.out.print(", costing ");
+		System.out.print(this.getCost() +"; ");
 
 	}
 

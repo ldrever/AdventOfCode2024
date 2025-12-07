@@ -39,6 +39,13 @@ public class Day16_Retry{
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
 				newZone = currentZone.buildNewZone(min, max);
+
+
+				ArrayList<Day16RoomHistoryPath> interZonePathways = currentZone.reachOtherZone(newZone);
+
+				System.out.println(interZonePathways.size() + " ways of getting from zone " + i + " to zone " + (i+1));
+
+
 				System.out.print("endpoints reachable with least cost between ");
 				System.out.print(min);
 				System.out.print(" and ");
@@ -55,7 +62,7 @@ public class Day16_Retry{
 					break;
 				}
 
-				newZone.showWithBro(currentZone);
+				//newZone.showWithBro(currentZone);
 
 
 

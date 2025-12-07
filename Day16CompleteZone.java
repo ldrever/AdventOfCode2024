@@ -7,6 +7,8 @@ public class Day16CompleteZone {
 	private ArrayList<Day16RoomState> zoneStates;
 	private ArrayList<Day16RoomState> ancestorZone;
 
+	public int getMin() {return this.min;}
+	public int getMax() {return this.max;}
 	public ArrayList<Day16RoomState> getZoneStates() {return this.zoneStates;}
 
 	/*
@@ -141,5 +143,37 @@ public class Day16CompleteZone {
 		} // path loop
 		return -1;
 	} // getEndCost
+
+
+
+	public ArrayList<Day16RoomHistoryPath> reachOtherZone(Day16CompleteZone destination) { // LDFIXME shld be arraylist
+		int max = destination.getMax();
+		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
+
+		// starting from this zone's states, extend them onwards
+		// (the explore function implements max-cost filtering)
+		for(Day16RoomState startPoint : this.zoneStates) {
+			startPoint.display();
+			ArrayList<Day16RoomHistoryPath> reachables = new Day16RoomHistoryPath(startPoint).explore(max);
+		//	System.out.println("Can reach " + reachables.size() + " while keeping to a max cost of " + max);
+
+			for(int reachableIndex = reachables.size() - 1; reachableIndex >= 0; reachableIndex--) {
+				Day16RoomState head = reachables.get(reachableIndex).getHead();
+				for(Day16RoomState destinationState : destination.getZoneStates()) {
+					if(head.matchesPositionAndDirection(destinationState)) {
+						output.add(reachables.get(reachableIndex));
+						break;
+					}
+
+				}
+
+			}
+
+
+		}
+
+		return output;
+
+	}
 
 } // class
