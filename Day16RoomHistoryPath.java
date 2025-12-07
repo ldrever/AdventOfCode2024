@@ -21,19 +21,18 @@ public class Day16RoomHistoryPath {
 	*/
 
 	private ArrayList<Day16RoomState> history;
-	private int cost;
 
-	public int getCost() {return this.cost;}
+	public int getCost() {return this.getHead().getCost();}
 
 	public Day16RoomHistoryPath(Day16RoomState start) {
 		this.history = new ArrayList<Day16RoomState>();
 		this.history.add(start);
-		this.cost = 0;
+
 	} // known-first-room constructor
 
 	public Day16RoomHistoryPath() {
 		this.history = new ArrayList<Day16RoomState>();
-		this.cost = 0;
+
 	} // empty-path constructor
 
 	// we'll say that the tail is at the start
@@ -42,23 +41,17 @@ public class Day16RoomHistoryPath {
 	}
 
 
-
-	private void setCost(int newCost){this.cost = newCost;}
-
-	// should really be private, but used to form an invalid path purely
-	// for showing the frontier
-	public void addRoomWithoutCostUpdate(Day16RoomState newHead) {
+	public void addRoom(Day16RoomState newHead) {
 		this.history.add(newHead);
-	} // addRoomWithoutCostUpdate
+	} // addRoom
 
 
 
 	public Day16RoomHistoryPath clone() {
 		Day16RoomHistoryPath output = new Day16RoomHistoryPath();
-		output.setCost(this.getCost());
 
 		for(Day16RoomState myHistoryItem : this.history) {
-			output.addRoomWithoutCostUpdate(myHistoryItem);
+			output.addRoom(myHistoryItem);
 		} // add-roomstate loop
 
 		return output;
@@ -117,17 +110,7 @@ public class Day16RoomHistoryPath {
 					System.out.println(" is valid");
 				} // debug
 				Day16RoomHistoryPath newPath = this.clone();
-				newPath.addRoomWithoutCostUpdate(candidateNeighbour);
-				int additionalCost = 1; // for a single step
-				if(candidateNeighbour.getDxEntry() == head.getDxEntry() && candidateNeighbour.getDyEntry() == head.getDyEntry()) {
-
-
-				} else {
-					additionalCost += 1000; // for a turn
-				}
-
-
-				newPath.setCost(additionalCost + this.getCost());
+				newPath.addRoom(candidateNeighbour);
 				output.add(newPath);
 
 			} // plausibleCandidate

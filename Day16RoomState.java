@@ -14,11 +14,13 @@ public class Day16RoomState {
 	private int yCoord;
 	private int dxEntry;
 	private int dyEntry;
+	private int cost;
 
 	public int getXCoord(){return this.xCoord;}
 	public int getYCoord(){return this.yCoord;}
 	public int getDxEntry(){return this.dxEntry;}
 	public int getDyEntry(){return this.dyEntry;}
+	public int getCost(){return this.cost;}
 
 	public String getCompassDirection() {
 		if(this.dxEntry == 1) return "East";
@@ -40,12 +42,13 @@ public class Day16RoomState {
 
 	}
 
-	public Day16RoomState(Day16LetterGrid parentGrid, int xCoord, int yCoord, int dxEntry, int dyEntry) {
+	public Day16RoomState(Day16LetterGrid parentGrid, int xCoord, int yCoord, int dxEntry, int dyEntry, int cost) {
 		this.parentGrid = parentGrid;
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
 		this.dxEntry = dxEntry;
 		this.dyEntry = dyEntry;
+		this.cost = cost;
 	}
 
 	public Day16LetterGrid getParentGrid() {
@@ -66,7 +69,11 @@ public class Day16RoomState {
 
 					// check it's not a wall
 					if(cell != '#') {
-						newRS = new Day16RoomState(this.getParentGrid(), this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy, extendmentDx, extendmentDy);
+						newRS = new Day16RoomState(this.getParentGrid(), this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy, extendmentDx, extendmentDy
+						,this.getCost() + (this.getDxEntry() == extendmentDx && this.getDyEntry() == extendmentDy ? 1 : 1001)
+
+
+						);
 
 						if(debug) {
 							System.out.print("Neighbour at ");

@@ -37,7 +37,7 @@ public class Day16CompleteZone {
 		// slightly dirty, because it's not a path really, but a collection of end-points
 		Day16RoomHistoryPath showZone = new Day16RoomHistoryPath();
 		for(Day16RoomHistoryPath validPath : this.pathsIntoZone) {
-			showZone.addRoomWithoutCostUpdate(validPath.getHead());
+			showZone.addRoom(validPath.getHead());
 
 		} // valid loop
 		showZone.show();
