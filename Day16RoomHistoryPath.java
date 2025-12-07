@@ -38,6 +38,10 @@ public class Day16RoomHistoryPath {
 	} // empty-path constructor
 
 	// we'll say that the tail is at the start
+	public Day16RoomState getTail() {
+		return this.history.get(0);
+	}
+
 	public Day16RoomState getHead() {
 		return this.history.get(this.history.size() - 1);
 	}

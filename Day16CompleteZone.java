@@ -158,7 +158,59 @@ public class Day16CompleteZone {
 
 
 
+	public void pruneWithRespectTo(Day16CompleteZone destination) {
+		System.out.print("Originally there were " + this.zoneStates.size() + " states.");
+		// used to the convention of putting the output here - but we don't RETURN
+		// it as such, we just ensure it's all that's left after pruning
+		ArrayList<Day16RoomState> output = new ArrayList<Day16RoomState>();
+
+		ArrayList<Day16RoomHistoryPath> pathsThatHit = this.reachOtherZone(destination);
+		for (Day16RoomHistoryPath path : pathsThatHit) {
+			output.add(path.getTail());
+		}
+
+		for(int i = this.pathsIntoZone.size() - 1; i >= 0; i--) {
+		//	if (this.pathsIntoZone.get(i).getCost() > endCost || ! this.pathsIntoZone.get(i).getHead().isEnd()) this.pathsIntoZone.remove(i);
+
+			boolean toKill = true;
+
+			for(Day16RoomState validStart : output) {
+				if(this.pathsIntoZone.get(i).getHead().matchesPositionAndDirection(validStart)) {
+					toKill = false;
+					break;
+				}
+
+			}
+
+			if(toKill) this.pathsIntoZone.remove(i);
+
+		}
+
+		for(int i = this.zoneStates.size() - 1; i >= 0; i--) {
+		//	if (this.zoneStates.get(i).getCost() > endCost || ! this.zoneStates.get(i).isEnd()) this.zoneStates.remove(i);
+
+			boolean toKill = true;
+
+			for(Day16RoomState validStart : output) {
+				if(this.zoneStates.get(i).matchesPositionAndDirection(validStart)) {
+					toKill = false;
+					break;
+				}
+
+			}
+
+			if(toKill) this.zoneStates.remove(i);
+		}
+
+		System.out.println("; after pruning, " + this.zoneStates.size() + ".");
+		return;
+	}
+
+
+
 	public ArrayList<Day16RoomHistoryPath> reachOtherZone(Day16CompleteZone destination) {
+
+
 		int max = destination.getMax();
 		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
 

@@ -88,7 +88,11 @@ public class Day16_Retry{
 			i = zoneRecord.size() - 2; // the VERY last one got pruned in its own special way
 			while(i >= 0) {
 				ArrayList<Day16RoomHistoryPath> pathsUp = zoneRecord.get(i).reachOtherZone(zoneRecord.get(i + 1));
-				System.out.println(pathsUp.size() + " ways of getting from zone " + i + " to " + (i+1));
+				//System.out.print(pathsUp.size() + " original ways of getting from zone " + i + " to " + (i+1));
+				zoneRecord.get(i).pruneWithRespectTo(zoneRecord.get(i + 1));
+				//pathsUp = zoneRecord.get(i).reachOtherZone(zoneRecord.get(i + 1));
+				//System.out.println("; " + pathsUp.size() + "after pruning.");
+
 				i--;
 			}
 
