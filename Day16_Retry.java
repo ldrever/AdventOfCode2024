@@ -3,6 +3,14 @@ import java.io.*;
 
 public class Day16_Retry{
 
+
+	private static boolean doContinue(Scanner sc) {
+		System.out.println("Do you want to continue? (y/n): ");
+		String input = sc.next();
+		return input.toLowerCase().equals("y");
+	}
+
+
 	public static void main(String[] args) {
 
 			boolean debug = true;
@@ -20,7 +28,13 @@ public class Day16_Retry{
 
 			Day16CompleteZone newZone = new Day16CompleteZone(start, 0, 0);
 			int interval = 1001;
-			for(int i = 1; ; i++) {
+			//for(int i = 1; ; i++) {
+
+				int i = 0;
+				Scanner scanner = new Scanner(System.in);
+			while(doContinue(scanner)) {
+				i++;
+
 				Day16CompleteZone currentZone = newZone;
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
@@ -40,6 +54,14 @@ public class Day16_Retry{
 					System.out.println(endCost);
 					break;
 				}
+
+				newZone.showWithBro(currentZone);
+
+
+
+
+
+
 
 			} // i loop
 

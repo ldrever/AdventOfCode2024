@@ -6,6 +6,9 @@ public class Day16CompleteZone {
 	private ArrayList<Day16RoomHistoryPath> pathsIntoZone;
 	private ArrayList<Day16RoomState> zoneStates;
 	private ArrayList<Day16RoomState> ancestorZone;
+
+	public ArrayList<Day16RoomState> getZoneStates() {return this.zoneStates;}
+
 	/*
 
 		Defined such that EVERY room that's POSSIBLY reachable
@@ -55,6 +58,26 @@ public class Day16CompleteZone {
 
 	} // show
 
+	public void showWithBro(Day16CompleteZone bro) {
+
+		// slightly dirty, because not paths really, but collections of end-points
+		Day16RoomHistoryPath showZone = new Day16RoomHistoryPath();
+		for(Day16RoomState rs : this.getZoneStates()) showZone.addRoom(rs);
+
+		Day16RoomHistoryPath broZone = new Day16RoomHistoryPath();
+		for(Day16RoomState rs : bro.getZoneStates()) broZone.addRoom(rs);
+
+
+		/*
+		for(Day16RoomHistoryPath validPath : this.pathsIntoZone) {
+			showZone.addRoom(validPath.getHead());
+
+		} // valid loop
+		*/
+		showZone.showWithBro(broZone);
+
+
+	}
 
 
 	public Day16CompleteZone buildNewZone(int min, int max) {

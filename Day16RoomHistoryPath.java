@@ -22,6 +22,8 @@ public class Day16RoomHistoryPath {
 
 	private ArrayList<Day16RoomState> history;
 
+	public ArrayList<Day16RoomState> getHistory() {return this.history;}
+
 	public int getCost() {return this.getHead().getCost();}
 
 	public Day16RoomHistoryPath(Day16RoomState start) {
@@ -136,6 +138,30 @@ public class Day16RoomHistoryPath {
 
 	} // show
 
+	public void showWithBro(Day16RoomHistoryPath bro) {
+			Day16LetterGrid newGrid = this.getHead().getParentGrid().duplicate();
+
+			for(Day16RoomState roomState : this.getHistory()) {
+				newGrid.setCell(roomState.getXCoord(), roomState.getYCoord(),'█');
+
+			} // room loop
+
+
+			for(Day16RoomState roomState : bro.getHistory()) {
+				newGrid.setCell(roomState.getXCoord(), roomState.getYCoord(),'▒');
+
+			} // room loop
+
+
+
+
+			newGrid.display();
+
+			System.out.print("Cost: ");
+			System.out.println(this.getCost());
+
+
+	}
 
 
 	public ArrayList<Day16RoomHistoryPath> explore(int max) {
