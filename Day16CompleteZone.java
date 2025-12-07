@@ -188,7 +188,20 @@ public class Day16CompleteZone {
 
 	}
 
+
+
 	public void finalPrune() {
+		int endCost = this.getEndCost();
+		if(endCost == -1) return;
+		for(int i = this.pathsIntoZone.size() - 1; i >= 0; i--) {
+			if (this.pathsIntoZone.get(i).getCost() > endCost || ! this.pathsIntoZone.get(i).getHead().isEnd()) this.pathsIntoZone.remove(i);
+
+		}
+
+		for(int i = this.zoneStates.size() - 1; i >= 0; i--) {
+			if (this.zoneStates.get(i).getCost() > endCost || ! this.zoneStates.get(i).isEnd()) this.zoneStates.remove(i);
+
+		}
 
 	}
 

@@ -61,7 +61,7 @@ public class Day16_Retry{
 					System.out.print("State-based and hard-comparisons. Final cost: ");
 					System.out.println(endCost);
 
-					// newZone.finalPrune();
+					newZone.finalPrune();
 
 					System.out.print("Post-prune verification: final zone now costs ");
 					System.out.print(newZone.getEndCost());
