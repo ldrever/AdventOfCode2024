@@ -31,15 +31,20 @@ public class Day16_Retry{
 			//for(int i = 1; ; i++) {
 
 				int i = 0;
-				Scanner scanner = new Scanner(System.in);
+			//	Scanner scanner = new Scanner(System.in);
 			//while(doContinue(scanner)) {
+
+			ArrayList<Day16CompleteZone> zoneRecord = new ArrayList<Day16CompleteZone>();
+			zoneRecord.add(newZone);
+
 			while(true) {
 				i++;
 
-				Day16CompleteZone currentZone = newZone;
+				Day16CompleteZone currentZone = zoneRecord.get(zoneRecord.size() - 1);
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
 				newZone = currentZone.buildNewZone(min, max);
+				zoneRecord.add(newZone);
 
 
 				ArrayList<Day16RoomHistoryPath> interZonePathways = currentZone.reachOtherZone(newZone);
@@ -75,11 +80,10 @@ public class Day16_Retry{
 
 
 
-
-
-
-
 			} // i loop
+
+
+
 
 
 			// LDFIXME EVENTUALLY remove the old day16
