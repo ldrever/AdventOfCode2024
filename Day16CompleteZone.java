@@ -4,6 +4,7 @@ public class Day16CompleteZone {
 	private int min;
 	private int max;
 	private ArrayList<Day16RoomHistoryPath> pathsIntoZone;
+	private ArrayList<Day16RoomState> zoneStates;
 	private ArrayList<Day16RoomState> ancestorZone;
 	/*
 
@@ -22,6 +23,9 @@ public class Day16CompleteZone {
 		pathsIntoZone.add(new Day16RoomHistoryPath(origin));
 		this.ancestorZone = new ArrayList<Day16RoomState>(); // empty at this point
 
+		this.zoneStates = new ArrayList<Day16RoomState>();
+		this.zoneStates.add(origin);
+
 	} // origin constructor
 
 	private Day16CompleteZone(int newMin, int newMax, ArrayList<Day16RoomHistoryPath> newPaths, ArrayList<Day16RoomState> forbiddenZone) {
@@ -30,16 +34,23 @@ public class Day16CompleteZone {
 		this.pathsIntoZone = newPaths;
 		this.ancestorZone = forbiddenZone;
 
+		this.zoneStates = new ArrayList<Day16RoomState>();
+		for(Day16RoomHistoryPath path : newPaths) this.zoneStates.add(path.getHead());
+
+
 	} // private constructor
 
 	public void show() {
 
 		// slightly dirty, because it's not a path really, but a collection of end-points
 		Day16RoomHistoryPath showZone = new Day16RoomHistoryPath();
+		for(Day16RoomState rs : this.zoneStates) showZone.addRoom(rs);
+		/*
 		for(Day16RoomHistoryPath validPath : this.pathsIntoZone) {
 			showZone.addRoom(validPath.getHead());
 
 		} // valid loop
+		*/
 		showZone.show();
 
 	} // show
@@ -92,7 +103,9 @@ public class Day16CompleteZone {
 
 	} // buildNewZone
 
-
+	public int getStateCount() {
+		return this.zoneStates.size();
+	}
 
 	public int getEndCost() {
 		for(Day16RoomHistoryPath path : this.pathsIntoZone) {

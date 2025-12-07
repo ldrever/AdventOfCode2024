@@ -25,11 +25,11 @@ public class Day16_Retry{
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
 				newZone = currentZone.buildNewZone(min, max);
-				System.out.print("Here are all endpoints reachable with least cost between ");
+				System.out.print("endpoints reachable with least cost between ");
 				System.out.print(min);
 				System.out.print(" and ");
-				System.out.println(max);
-
+				System.out.print(max);
+				System.out.println(" includes a state-count of " + newZone.getStateCount());
 
 				int endCost = newZone.getEndCost();
 
