@@ -32,7 +32,8 @@ public class Day16_Retry{
 
 				int i = 0;
 				Scanner scanner = new Scanner(System.in);
-			while(doContinue(scanner)) {
+			//while(doContinue(scanner)) {
+			while(true) {
 				i++;
 
 				Day16CompleteZone currentZone = newZone;
@@ -59,6 +60,14 @@ public class Day16_Retry{
 
 					System.out.print("State-based and hard-comparisons. Final cost: ");
 					System.out.println(endCost);
+
+					// newZone.finalPrune();
+
+					System.out.print("Post-prune verification: final zone now costs ");
+					System.out.print(newZone.getEndCost());
+					System.out.println(" and includes the following states: ");
+					newZone.show();
+
 					break;
 				}
 

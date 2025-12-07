@@ -132,21 +132,33 @@ public class Day16CompleteZone {
 		return this.zoneStates.size();
 	}
 
+
+
 	public int getEndCost() {
+		int bestScore = -1;
+
 		for(Day16RoomHistoryPath path : this.pathsIntoZone) {
 
 			if(path.getHead().isEnd()) {
-				path.show();
-				return path.getCost();
+
+				int newScore = path.getCost();
+
+				if(newScore < bestScore || bestScore == -1) {
+					bestScore = newScore;
+
+				}
+
+				// path.show();
+
 			} // end-check
 
 		} // path loop
-		return -1;
+		return bestScore;
 	} // getEndCost
 
 
 
-	public ArrayList<Day16RoomHistoryPath> reachOtherZone(Day16CompleteZone destination) { // LDFIXME shld be arraylist
+	public ArrayList<Day16RoomHistoryPath> reachOtherZone(Day16CompleteZone destination) {
 		int max = destination.getMax();
 		ArrayList<Day16RoomHistoryPath> output = new ArrayList<Day16RoomHistoryPath>();
 
@@ -173,6 +185,10 @@ public class Day16CompleteZone {
 		}
 
 		return output;
+
+	}
+
+	public void finalPrune() {
 
 	}
 
