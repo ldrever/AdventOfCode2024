@@ -38,9 +38,10 @@ public class Day16_Retry{
 			zoneRecord.add(newZone);
 
 			while(true) {
-				i++;
 
-				Day16CompleteZone currentZone = zoneRecord.get(zoneRecord.size() - 1);
+				i = zoneRecord.size();
+				Day16CompleteZone currentZone = zoneRecord.get(i - 1);
+
 				int min = 1 + (i-1) * 1001;
 				int max = 1001 * i;
 				newZone = currentZone.buildNewZone(min, max);
@@ -49,7 +50,7 @@ public class Day16_Retry{
 
 				ArrayList<Day16RoomHistoryPath> interZonePathways = currentZone.reachOtherZone(newZone);
 
-				System.out.println(interZonePathways.size() + " ways of getting from zone " + i + " to zone " + (i+1));
+				//System.out.println(interZonePathways.size() + " ways of getting from zone " + i + " to zone " + (i+1));
 
 
 				System.out.print("endpoints reachable with least cost between ");
@@ -82,7 +83,14 @@ public class Day16_Retry{
 
 			} // i loop
 
-
+			// now loop back downwards
+			// we know that the final one has been pruned
+			i = zoneRecord.size() - 2; // the VERY last one got pruned in its own special way
+			while(i >= 0) {
+				ArrayList<Day16RoomHistoryPath> pathsUp = zoneRecord.get(i).reachOtherZone(zoneRecord.get(i + 1));
+				System.out.println(pathsUp.size() + " ways of getting from zone " + i + " to " + (i+1));
+				i--;
+			}
 
 
 

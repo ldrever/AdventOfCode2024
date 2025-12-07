@@ -165,7 +165,7 @@ public class Day16CompleteZone {
 		// starting from this zone's states, extend them onwards
 		// (the explore function implements max-cost filtering)
 		for(Day16RoomState startPoint : this.zoneStates) {
-			startPoint.display();
+		//	startPoint.display();
 			ArrayList<Day16RoomHistoryPath> reachables = new Day16RoomHistoryPath(startPoint).explore(max);
 		//	System.out.println("Can reach " + reachables.size() + " while keeping to a max cost of " + max);
 
@@ -187,6 +187,9 @@ public class Day16CompleteZone {
 		return output;
 
 	}
+
+
+
 
 
 
