@@ -36,7 +36,7 @@ public class Day16_Retry{
 				if(endCost != -1) {
 
 
-					System.out.print("State-based final cost: ");
+					System.out.print("State-based and hard-comparisons. Final cost: ");
 					System.out.println(endCost);
 					break;
 				}

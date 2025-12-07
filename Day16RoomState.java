@@ -100,6 +100,11 @@ public class Day16RoomState {
 		return (newRS.getXCoord() == this.getXCoord() && newRS.getYCoord() == this.getYCoord());
 	} // matches
 
+	public boolean matchesPositionAndDirection(Day16RoomState newRS) {
+		boolean positionMatch = (newRS.getXCoord() == this.getXCoord() && newRS.getYCoord() == this.getYCoord());
+		boolean directionMatch = (newRS.getDxEntry() == this.getDxEntry() && newRS.getDyEntry() == this.getDyEntry());
+		return positionMatch && directionMatch;
+	} // ^ matchesPositionAndDirection
 
 	// LDFIXME why can't this handle an input of 3, but 2 is fine?
 	public void showPathsOfLength(int length) {

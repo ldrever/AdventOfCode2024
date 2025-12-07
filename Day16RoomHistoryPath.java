@@ -92,7 +92,7 @@ public class Day16RoomHistoryPath {
 				the head's neighbour will never be the head itself.
 			*/
 			for(int check = this.history.size() - 2; check >= 0; check--) {
-				if (this.history.get(check).matches(candidateNeighbour)) {
+				if (this.history.get(check).matches(candidateNeighbour)) { // intentionally NOT caring about directional matching
 					if(debug) {
 						System.out.print("Neighbour at ");
 						candidateNeighbour.display();

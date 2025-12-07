@@ -68,7 +68,7 @@ public class Day16CompleteZone {
 
 		for(Day16RoomState forbiddenState : forbiddenZone) {
 			for(int outputIndex = output.size() - 1; outputIndex >= 0; outputIndex--) {
-				if(forbiddenState.matches(output.get(outputIndex).getHead())) {
+				if(forbiddenState.matchesPositionAndDirection(output.get(outputIndex).getHead())) {
 					output.remove(outputIndex);
 				} // match check
 			} // output checking loop
@@ -80,7 +80,7 @@ public class Day16CompleteZone {
 			for(int j = output.size() - 1; j > i; j--) {
 
 				// after every comparison with a match, the cheaper survivor will be i, not j
-				if(output.get(i).getHead().matches(output.get(j).getHead())) {
+				if(output.get(i).getHead().matchesPositionAndDirection(output.get(j).getHead())) {
 					if(output.get(i).getCost() > output.get(j).getCost()) {
 						output.set(i, output.get(j));
 					} // j-cheaper condition
