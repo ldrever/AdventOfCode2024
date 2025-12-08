@@ -31,6 +31,12 @@ public class Day16RoomState {
 
 	}
 
+	public String toString() {
+		return "(" + this.getXCoord() + "," + this.getYCoord() + ")";
+
+
+	}
+
 	public void display() {
 		System.out.print("(");
 		System.out.print(this.getXCoord());
@@ -55,6 +61,47 @@ public class Day16RoomState {
 	public Day16LetterGrid getParentGrid() {
 		return this.parentGrid;
 	}
+
+	public ArrayList<Day16RoomState> getNeighbours(boolean debug, char c) {
+		ArrayList<Day16RoomState> output = new ArrayList<Day16RoomState>();
+
+		for(int extendmentDx = -1; extendmentDx <= 1; extendmentDx++) {
+			for(int extendmentDy = -1; extendmentDy <= 1; extendmentDy++) {
+
+				// precisely one must be zero
+				if(extendmentDx == 0 && extendmentDy != 0 || extendmentDx != 0 && extendmentDy == 0) {
+
+					char cell = this.getParentGrid().getCell(this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy);
+					Day16RoomState newRS;
+
+					// check it's the right char
+					if(cell == c) {
+						newRS = new Day16RoomState(this.getParentGrid(), this.getXCoord() + extendmentDx, this.getYCoord() + extendmentDy, extendmentDx, extendmentDy
+						,this.getCost() + (this.getDxEntry() == extendmentDx && this.getDyEntry() == extendmentDy ? 1 : 1001)
+
+
+						);
+
+						if(debug) {
+							System.out.print("Neighbour at ");
+							newRS.display();
+							System.out.println(" is not a wall.");
+
+						} // debug
+
+
+
+						output.add(newRS);
+					} // wall check
+
+				} // single step check
+
+			} // dy
+
+		} // dx
+
+		return output;
+	} // getNeighbours
 
 	public ArrayList<Day16RoomState> getNeighbours(boolean debug) {
 		ArrayList<Day16RoomState> output = new ArrayList<Day16RoomState>();

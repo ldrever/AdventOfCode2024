@@ -25,6 +25,7 @@ public class Day16_Retry{
 			lg.display();
 
 			Day16RoomState start = lg.findStartRoomState(true);
+			Day16RoomState end = lg.getEnd(false);
 
 			Day16CompleteZone newZone = new Day16CompleteZone(start, 0, 0);
 			int interval = 1001;
@@ -36,7 +37,7 @@ public class Day16_Retry{
 
 			ArrayList<Day16CompleteZone> zoneRecord = new ArrayList<Day16CompleteZone>();
 			zoneRecord.add(newZone);
-
+			int endCost = 0;
 			while(true) {
 
 				i = zoneRecord.size();
@@ -59,7 +60,7 @@ public class Day16_Retry{
 				System.out.print(max);
 				System.out.println(" includes a state-count of " + newZone.getStateCount());
 
-				int endCost = newZone.getEndCost();
+				endCost = newZone.getEndCost();
 
 				if(endCost != -1) {
 
@@ -100,6 +101,7 @@ public class Day16_Retry{
 				for(Day16RoomHistoryPath path : pathsUp) {
 					for(Day16RoomState rs : path.getHistory()) {
 						victoryPath.addRoom(rs);
+						lg.setCell(rs, 'O');
 
 					}
 
@@ -110,6 +112,33 @@ public class Day16_Retry{
 
 			victoryPath.show();
 
+			System.out.println("endCost: " + endCost);
+			ArrayList<Day16RoomHistoryPath> trackback = new Day16RoomHistoryPath(start).explore(endCost, 'O');
+			System.out.print(trackback.size() + " paths found; ");
+
+			Day16RoomHistoryPath victoryPath2 = new Day16RoomHistoryPath();
+			HashSet<String>victoryHash = new HashSet<String>();
+			int winners = 0;
+			for(Day16RoomHistoryPath path : trackback) {
+				if(path.getCost() == endCost && path.getHead().matches(end)) {
+
+					winners++;
+				// path.show();
+					for(Day16RoomState rs : path.getHistory()) {
+						victoryPath2.addRoom(rs);
+						victoryHash.add(rs.toString());
+						lg.setCell(rs, 'O');
+
+					}
+				}
+
+			}
+
+			System.out.println(winners + " are winners.");
+
+			victoryPath2.show();
+
+			System.out.println("finalest of answies: " + victoryHash.size());
 
 			// LDFIXME EVENTUALLY remove the old day16
 	}

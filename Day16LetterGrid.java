@@ -34,6 +34,11 @@ public class Day16LetterGrid {
 		this.grid[X][Y] = c;
 	}
 
+	public void setCell(Day16RoomState rs, char c) {
+		this.setCell(rs.getXCoord(), rs.getYCoord(), c);
+
+	}
+
 	public Day16LetterGrid duplicate() {
 		// presumably there was no exception if this got set up
 		try {
@@ -82,6 +87,20 @@ public class Day16LetterGrid {
 			for(int Y = 0; Y < this.height; Y++) {
 				char cellChar = this.getCell(X,Y);
 				if(cellChar == 'S') {
+					if (debug) System.out.println("New map. deer starts at (" + X + ", " + Y + ")");
+					return new Day16RoomState(this, X, Y, 1, 0, 0); // start facing east
+				}
+			}
+		}
+		return null;
+	} // findStartRoomState
+
+
+	public Day16RoomState getEnd(boolean debug) {
+		for(int X = 0; X < this.width; X++) {
+			for(int Y = 0; Y < this.height; Y++) {
+				char cellChar = this.getCell(X,Y);
+				if(cellChar == 'E') {
 					if (debug) System.out.println("New map. deer starts at (" + X + ", " + Y + ")");
 					return new Day16RoomState(this, X, Y, 1, 0, 0); // start facing east
 				}
